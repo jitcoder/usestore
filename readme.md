@@ -24,6 +24,9 @@ export const getItems = async () => {
 
 `MyComponent.jsx`
 ```jsx
+import React from 'react';
+import { useStore } from '@jitcoder/usestore'
+
 const ItemView = () => {
   const [items] = useStore('todo.items', []);
   return (
