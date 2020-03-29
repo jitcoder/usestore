@@ -5,20 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
 const lodash_1 = __importDefault(require("lodash"));
-const eventtarget_1 = __importDefault(require("eventtarget"));
-const customeventpolyfill_1 = __importDefault(require("./customeventpolyfill"));
-if (!('EventTarget' in window)) {
-    window.EventTarget = eventtarget_1.default;
-}
-if (!('CustomEvent' in window)) {
-    //@ts-ignore
-    window.CustomEvent = customeventpolyfill_1.default;
-}
-class Store extends EventTarget {
+const eventtarget_1 = require("eventtarget");
+class Store extends eventtarget_1.EventTarget {
     constructor() {
         super();
         this.store = {};
-        if (window && window.__INITIAL_STATE__) {
+        if (window.__INITIAL_STATE__) {
             this.store = typeof window.__INITIAL_STATE__ === 'string' ? JSON.parse(window.__INITIAL_STATE__) : window.__INITIAL_STATE__;
         }
     }

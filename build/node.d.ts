@@ -1,8 +1,8 @@
+import { EventTarget } from 'eventtarget';
 declare global {
     interface Window {
         __STATE__: any;
         __INITIAL_STATE__: any;
-        EventTarget: any;
     }
 }
 declare class Store extends EventTarget {
@@ -12,5 +12,5 @@ declare class Store extends EventTarget {
     get<T>(key: string, defaultValue?: any): T | any;
 }
 declare const store: Store;
-export declare const useStore: <T>(key: string, initialState?: {}) => (T | ((value: any) => void))[];
+export declare const useStore: <T>(key: string, initialState?: {}) => (((value: any) => void) | T)[];
 export default store;

@@ -1,20 +1,31 @@
 import { useState, useEffect } from 'react';
 import _ from 'lodash';
+import EventTargetPolyfill from 'eventtarget';
+import CustomEventPolyfill from './customeventpolyfill';
+
+if (!('EventTarget' in window)) {
+  window.EventTarget = EventTargetPolyfill
+}
+
+if (!('CustomEvent' in window)) {
+  //@ts-ignore
+  window.CustomEvent = CustomEventPolyfill;
+}
 
 declare global {
   interface Window { 
     __STATE__: any;
     __INITIAL_STATE__: any;
+    EventTarget: any;
   }
 }
-
 class Store extends EventTarget {
   store: any = {};
 
   constructor() {
     super();
 
-    if (window.__INITIAL_STATE__) {
+    if (window && window.__INITIAL_STATE__) {
       this.store = typeof window.__INITIAL_STATE__ === 'string' ? JSON.parse(window.__INITIAL_STATE__) : window.__INITIAL_STATE__;
     }
   }
@@ -36,7 +47,7 @@ class Store extends EventTarget {
 const store = new Store();
 
 
-export const useStore = <T>(key: string, initialState = {}) => {
+export const useStore = <T>(key: string, initialState = {}): [T, (arg0: T) => void] => {
   if (store.get(key, null) === null) {
     store.set(key, initialState);
   }
@@ -53,7 +64,7 @@ export const useStore = <T>(key: string, initialState = {}) => {
     return () => store.removeEventListener(key, setStateCallBack);
   }, [key, stateSetter]);
 
-  return [store.get(key) as T,store.set.bind(store, key)];
+  return [store.get(key),store.set.bind(store, key)];
 };
 
 if (window) {
