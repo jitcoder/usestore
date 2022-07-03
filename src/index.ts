@@ -39,7 +39,7 @@ class Store extends EventTarget {
     this.dispatchEvent(event);
   }
 
-  get<T>(key: string, defaultValue: any = {}): T | any {
+  get<T>(key: string, defaultValue: any): T | any {
     return _.get(this.store, key, defaultValue);
   }
 }
@@ -47,11 +47,7 @@ class Store extends EventTarget {
 const store = new Store();
 
 
-export const useStore = <T>(key: string, initialState = {}): [T, (arg0: T) => void] => {
-  if (store.get(key, null) === null) {
-    store.set(key, initialState);
-  }
-
+export const useStore = <T>(key: string, initialState: any): [T, (arg0: T) => void] => {
   const stateSetter = useState()[1];
 
   useEffect(() => {
@@ -64,7 +60,7 @@ export const useStore = <T>(key: string, initialState = {}): [T, (arg0: T) => vo
     return () => store.removeEventListener(key, setStateCallBack);
   }, [key, stateSetter]);
 
-  return [store.get(key),store.set.bind(store, key)];
+  return [store.get(key, initialState),store.set.bind(store, key)];
 };
 
 if (window) {

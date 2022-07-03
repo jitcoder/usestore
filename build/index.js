@@ -29,15 +29,12 @@ class Store extends EventTarget {
         });
         this.dispatchEvent(event);
     }
-    get(key, defaultValue = {}) {
+    get(key, defaultValue) {
         return lodash_1.default.get(this.store, key, defaultValue);
     }
 }
 const store = new Store();
-exports.useStore = (key, initialState = {}) => {
-    if (store.get(key, null) === null) {
-        store.set(key, initialState);
-    }
+exports.useStore = (key, initialState) => {
     const stateSetter = react_1.useState()[1];
     react_1.useEffect(() => {
         const setStateCallBack = (e) => {
@@ -46,7 +43,7 @@ exports.useStore = (key, initialState = {}) => {
         store.addEventListener(key, setStateCallBack);
         return () => store.removeEventListener(key, setStateCallBack);
     }, [key, stateSetter]);
-    return [store.get(key), store.set.bind(store, key)];
+    return [store.get(key, initialState), store.set.bind(store, key)];
 };
 if (window) {
     window.__STATE__ = store.store;
