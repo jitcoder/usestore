@@ -1,10 +1,13 @@
 {
   "name": "@jitcoder/usestore",
-  "version": "1.0.20",
+  "version": "1.0.22",
   "description": "",
   "main": "build/index.js",
   "scripts": {
     "prepare": "yarn tsc"
+  },
+  "repository": {
+    "url": "https://github.com/jitcoder/usestore"
   },
   "keywords": [],
   "author": "",
